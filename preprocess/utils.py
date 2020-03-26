@@ -1,0 +1,114 @@
+from nose.tools import assert_equal, assert_true
+
+"""
+A class to get document statistics, like tf-idf for NLP tasks.
+"""
+class DocumentStatsBuilder():
+    """
+    Build the inverted index for a list of document.
+
+    Args:
+        doc_words_ls: A list of document, each document is a string of words seperated
+                      by space.
+        word2idx: A dictm mapping from word to index.
+    Return: 
+        a dict represents the inverted index, both the word and the docs are
+        in index format (numericalized).
+        Example: {
+            word_1_idx: [doc_1_idx, doc_2_idx, doc_4_idx]
+            word_2_idx: [doc_2, doc_3]
+        }
+    """
+    @staticmethod
+    def build_inverted_index(doc_words_ls, word2idx):
+        inverted_index = {}        
+        for doc_idx, doc_words in enumerate(doc_words_ls):
+            appeared = set()
+            for word in doc_words.split():
+                if word in appeared:
+                    continue
+                word_idx = word2idx[word]
+                if word_idx not in inverted_index:
+                    inverted_index[word_idx] = [doc_idx]
+                else:
+                    inverted_index[word_idx].append(doc_idx)
+                appeared.add(word)
+        
+        return inverted_index
+
+    @staticmethod
+    def doc_freq(doc_words_ls, word2idx, inverted_index=None):
+        doc_freq = {}
+
+        if inverted_index is None:
+            inverted_index = DocumentStatsBuilder.build_inverted_index(doc_words_ls, word2idx)
+
+        for k, v in inverted_index.items():
+            doc_freq[k] = len(v)
+
+        return doc_freq
+
+    """
+    (doc_id, term_id): tf_val
+    """
+    @staticmethod
+    def term_freq(doc_words_ls, word2idx, normalize=False):
+        def get_normalized_tf_value(word):
+            word_idx = word2idx[word]
+            if normalize:
+                return (doc_idx, word_idx, 1 / word_cnt)
+            else:
+                return (doc_idx, word_idx, 1)
+
+        term_freq = {}
+        for doc_idx, doc_words in enumerate(doc_words_ls):
+            words_ls = doc_words.split()
+            word_cnt = len(words_ls)
+            tf_temp_ls = list(map(lambda word: get_normalized_tf_value(word), words_ls))
+            for tf_temp in tf_temp_ls:
+                doc_word_pair = tf_temp[:2]
+                tf_val = tf_temp[2]
+                if doc_word_pair in term_freq:
+                    term_freq[doc_word_pair] += tf_val
+                else:
+                    term_freq[doc_word_pair] = tf_val
+        return term_freq
+
+"""
+Some local test.
+"""
+if __name__ == '__main__':
+    doc_words_ls = ['I I like Zoe I', 'Zoe like me me']
+    word2idx = {'I': 0, 'like': 1, 'Zoe': 2, 'me':3}
+
+    # test build_inverted_index
+    expected = {
+        0: [0],
+        1: [0, 1],
+        2: [0, 1],
+        3: [1]
+    }
+    inverted_index = DocumentStatsBuilder.build_inverted_index(doc_words_ls, word2idx)
+    assert_equal(expected, inverted_index, "Incorrect result for DocumentStatsBuilder.build_inverted_index")
+    
+    # test doc_freq
+    expected = {0: 1, 1: 2, 2: 2, 3: 1}
+    assert_equal(expected, DocumentStatsBuilder.doc_freq(doc_words_ls, word2idx, inverted_index), 
+            "Incorrect result for DocumentStatsBuilder.doc_freq")
+    assert_equal(expected, DocumentStatsBuilder.doc_freq(doc_words_ls, word2idx), 
+            "Incorrect result for DocumentStatsBuilder.doc_freq")
+    
+    # test term_freq
+    expected = {
+        (0, 0): 3,
+        (0, 1): 1,
+        (0, 2): 1,
+        (1, 1): 1,
+        (1, 2): 1,
+        (1, 3): 2,
+    }
+    assert_equal(expected, DocumentStatsBuilder.term_freq(doc_words_ls, word2idx, False),
+            "Incorrect result for DocumentStatsBuilder.term_freq")
+
+
+
