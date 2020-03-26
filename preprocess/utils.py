@@ -1,3 +1,4 @@
+import math as m
 from nose.tools import assert_equal, assert_true
 
 """
@@ -74,8 +75,88 @@ class DocumentStatsBuilder():
                     term_freq[doc_word_pair] = tf_val
         return term_freq
 
+    @staticmethod
+    def _get_doc_windows(doc_words_ls, window_size):
+        doc_windows = []
+
+        for doc_words in doc_words_ls:
+            words = doc_words.split()
+            length = len(words)
+            if length <= window_size:
+                doc_windows.append(words)
+            else:
+                for i in range(length - window_size + 1):
+                    window = words[i: i + window_size]
+                    doc_windows.append(window)
+        
+        return doc_windows
+
+    @staticmethod
+    def _get_word_window_freq(doc_windows, word2idx):
+        word_window_freq = {}
+
+        for window in doc_windows:
+            appeared = set()
+            for word in window:
+                word_idx = word2idx[word]
+                if word_idx in appeared:
+                    continue
+                if word_idx in word_window_freq:
+                    word_window_freq[word_idx] += 1
+                else:
+                    word_window_freq[word_idx] = 1
+                appeared.add(word_idx)
+
+        return word_window_freq
+
+    @staticmethod
+    def _get_word_pair_cnt(doc_windows, word2idx):
+        word_pair_count = {}
+
+        for window in doc_windows:
+            for i in range(1, len(window)):
+                for j in range(0, i):
+                    word_i_id = word2idx[window[i]]
+                    word_j_id = word2idx[window[j]]
+
+                    # ignore when two words are the same
+                    if word_i_id == word_j_id:
+                        continue
+
+                    word_pair = (word_i_id, word_j_id)
+                    if word_pair in word_pair_count:
+                        word_pair_count[word_pair] += 1
+                    else:
+                        word_pair_count[word_pair] = 1
+                    
+                    # reverse order
+                    word_pair = (word_j_id, word_i_id)
+                    if word_pair in word_pair_count:
+                        word_pair_count[word_pair] += 1
+                    else:
+                        word_pair_count[word_pair] = 1
+
+        return word_pair_count
+
+    @staticmethod
+    def PMI(doc_words_ls, word2idx, window_size):
+        if window_size < 2:
+            raise ValueError("window size must be greater than 1.")
+ 
+        PMI = {}
+        doc_windows = DocumentStatsBuilder._get_doc_windows(doc_words_ls, window_size)
+        word_window_freq = DocumentStatsBuilder._get_word_window_freq(doc_windows, word2idx)
+        word_pair_cnt = DocumentStatsBuilder._get_word_pair_cnt(doc_windows, word2idx) 
+
+        for (i, j), pair_cnt_ij in word_pair_cnt.items():
+            PMI[(i, j)] = m.log(pair_cnt_ij * len(doc_windows) / 
+                (word_window_freq[i] * word_window_freq[j]))
+
+        return PMI
+
+
 """
-Some local test.
+Simple unit test.
 """
 if __name__ == '__main__':
     doc_words_ls = ['I I like Zoe I', 'Zoe like me me']
@@ -110,5 +191,18 @@ if __name__ == '__main__':
     assert_equal(expected, DocumentStatsBuilder.term_freq(doc_words_ls, word2idx, False),
             "Incorrect result for DocumentStatsBuilder.term_freq")
 
-
-
+    # test PMI
+    expected = {
+        (1, 0): -0.54, 
+        (0, 1): -0.54, 
+        (2, 1): 0.15, 
+        (1, 2): 0.15, 
+        (0, 2): -0.25, 
+        (2, 0): -0.25, 
+        (3, 1): -0.13, 
+        (1, 3): -0.13
+    }
+    pmi = DocumentStatsBuilder.PMI(doc_words_ls, word2idx, window_size=2)
+    for k, v in pmi.items():
+        pmi[k] = round(v, 2)
+    assert_equal(expected, pmi, "Incorrect result for DocumentStatsBuilder.PMI")
