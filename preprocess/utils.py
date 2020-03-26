@@ -1,6 +1,7 @@
 import math as m
 from nose.tools import assert_equal, assert_true
 
+
 """
 A class to get document statistics, like tf-idf for NLP tasks.
 """

@@ -1,2 +1,5 @@
 # ignore data file
 *data/*
+
+# cache file
+*.pyc

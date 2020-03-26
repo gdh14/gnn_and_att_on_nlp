@@ -1,0 +1,4 @@
+preprocess:
+    train_random_seed: 1
+    test_random_seed: 2
+    val_split_ratio: 0.1
