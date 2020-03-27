@@ -1,4 +1,6 @@
+import re
 import math as m
+
 from nose.tools import assert_equal, assert_true
 
 
@@ -77,6 +79,55 @@ class DocumentStatsBuilder():
         return term_freq
 
     @staticmethod
+    def PMI(doc_words_ls, word2idx, window_size):
+        if window_size < 2:
+            raise ValueError("window size must be greater than 1.")
+ 
+        PMI = {}
+        doc_windows = DocumentStatsBuilder._get_doc_windows(doc_words_ls, window_size)
+        word_window_freq = DocumentStatsBuilder._get_word_window_freq(doc_windows, word2idx)
+        word_pair_cnt = DocumentStatsBuilder._get_word_pair_cnt(doc_windows, word2idx) 
+
+        for (i, j), pair_cnt_ij in word_pair_cnt.items():
+            PMI[(i, j)] = m.log(pair_cnt_ij * len(doc_windows) / 
+                (word_window_freq[i] * word_window_freq[j]))
+
+        return PMI
+
+    @staticmethod
+    def clean_str(string):
+        string = re.sub(r"[^A-Za-z0-9(),!?\'\`]", " ", string)
+        string = re.sub(r"\'s", " \'s", string)
+        string = re.sub(r"\'ve", " \'ve", string)
+        string = re.sub(r"n\'t", " n\'t", string)
+        string = re.sub(r"\'re", " \'re", string)
+        string = re.sub(r"\'d", " \'d", string)
+        string = re.sub(r"\'ll", " \'ll", string)
+        string = re.sub(r",", " , ", string)
+        string = re.sub(r"!", " ! ", string)
+        string = re.sub(r"\(", " \( ", string)
+        string = re.sub(r"\)", " \) ", string)
+        string = re.sub(r"\?", " \? ", string)
+        string = re.sub(r"\s{2,}", " ", string)
+        return string.strip().lower()
+
+    @staticmethod
+    def word_freq(text_ls):
+        word_freq = {}
+
+        for text in text_ls:
+            clean_text = DocumentStatsBuilder.clean_str(text)
+            words = clean_text.split()
+            for word in words:
+                if word in word_freq:
+                    word_freq[word] += 1
+                else:
+                    word_freq[word] = 1
+        
+        return word_freq
+
+
+    @staticmethod
     def _get_doc_windows(doc_words_ls, window_size):
         doc_windows = []
 
@@ -139,21 +190,8 @@ class DocumentStatsBuilder():
 
         return word_pair_count
 
-    @staticmethod
-    def PMI(doc_words_ls, word2idx, window_size):
-        if window_size < 2:
-            raise ValueError("window size must be greater than 1.")
- 
-        PMI = {}
-        doc_windows = DocumentStatsBuilder._get_doc_windows(doc_words_ls, window_size)
-        word_window_freq = DocumentStatsBuilder._get_word_window_freq(doc_windows, word2idx)
-        word_pair_cnt = DocumentStatsBuilder._get_word_pair_cnt(doc_windows, word2idx) 
 
-        for (i, j), pair_cnt_ij in word_pair_cnt.items():
-            PMI[(i, j)] = m.log(pair_cnt_ij * len(doc_windows) / 
-                (word_window_freq[i] * word_window_freq[j]))
 
-        return PMI
 
 
 """
