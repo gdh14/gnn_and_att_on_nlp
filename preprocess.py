@@ -71,16 +71,16 @@ def main():
     print("label all shape {}".format(label_all.shape))
 
     # build the heterograph (edge weights)
-    # graph_builder = TextHeteroGraphBuilder(config_file, train_size=len(text_ls_train), 
-    #         val_size=len(text_ls_val), test_size=len(text_ls_test), vocab_size=len(vocab))
+    graph_builder = TextHeteroGraphBuilder(config_file, train_size=len(text_ls_train), 
+            val_size=len(text_ls_val), test_size=len(text_ls_test), vocab_size=len(vocab))
 
-    # text_ls = text_ls_train + text_ls_val + text_ls_test
-    # hetero_graph = graph_builder.build_graph(text_ls, word2idx)
+    text_ls = text_ls_train + text_ls_val + text_ls_test
+    hetero_graph = graph_builder.build_graph(text_ls, word2idx)
 
-    # IOHelper.save_file(hetero_graph,\
-    #     os.path.join(data_root_dir, "ind.{}.adj".format(dataset)), 'pickle')    
+    IOHelper.save_file(hetero_graph,\
+        os.path.join(data_root_dir, "ind.{}.adj".format(dataset)), 'pickle')    
     
-    # print("Preprocessing finished [{:.0f}s]".format(time() - start))
+    print("Preprocessing finished [{:.0f}s]".format(time() - start))
 
 if __name__ == '__main__':
     main()
