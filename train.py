@@ -10,7 +10,7 @@ import torch.nn as nn
 import numpy as np
 
 from utils.utils import *
-from models.gcn import GCN
+from models.gcn import TextGCN
 from models.mlp import MLP
 
 from config import CONFIG
@@ -48,9 +48,9 @@ features = sp.identity(features.shape[0], dtype=np.float32).A  # featureless
 # Some preprocessing
 # features = preprocess_features(features)
 if cfg.model == 'gcn':
-    support = [preprocess_adj(adj)]
+    support = preprocess_adj(adj)
     num_supports = 1
-    model_func = GCN
+    model_func = TextGCN
 elif cfg.model == 'gcn_cheby':
     support = chebyshev_polynomials(adj, cfg.max_degree)
     num_supports = 1 + cfg.max_degree
@@ -71,9 +71,9 @@ t_y_test = torch.from_numpy(y_test)
 t_train_mask = torch.from_numpy(train_mask.astype(np.float32))
 tm_train_mask = torch.transpose(torch.unsqueeze(t_train_mask, 0), 1, 0).repeat(1, y_train.shape[1])
 
-t_support = []
-for i in range(len(support)):
-    t_support.append(torch.Tensor(support[i]))
+import pdb; pdb.set_trace()
+
+t_support = torch.Tensor(support)
 
 # if torch.cuda.is_available():
 #     model_func = model_func.cuda()
@@ -86,7 +86,7 @@ for i in range(len(support)):
 #     for i in range(len(support)):
 #         t_support = [t.cuda() for t in t_support if True]
         
-model = model_func(input_dim=features.shape[0], support=t_support, num_classes=y_train.shape[1])
+model = model_func(input_dim=features.shape[0], A_norm=t_support, num_classes=y_train.shape[1])
 
 
 # Loss and optimizer
