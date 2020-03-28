@@ -1,30 +1,96 @@
 import re
 import math as m
+import numpy as np
+import pickle as pkl
+import networkx as nx
+import scipy.sparse as sp
+from scipy.sparse.linalg.eigen.arpack import eigsh
+import sys
 
 from nose.tools import assert_equal, assert_true
+
+
+class IOHelper():
+    @staticmethod
+    def save_file(data, file_dir, method):
+        if method == 'pickle':
+            with open(file_dir, 'wb') as f:
+                pkl.dump(data, f)
+        else:
+            raise ValueError("method {} is not defined to save the file".format(method))
+
+class TextConverter():
+    @staticmethod
+    def build_doc_feature(text_ls, vocab, method='all_zero', sparse=False):
+        """
+        Build the feature matrix of a list of documents.
+
+        Return:
+            a numpy.array with size (doc_cnt, feature_dim)
+        """
+        vocab_set = vocab.get_vocab_set()
+        word2idx = vocab.get_word2idx()
+        word_embedding = vocab.get_word_embedding()
+        embed_dim = vocab.embed_dim
+        random_embed = np.random.uniform(-0.01, 0.01, embed_dim)
+
+        if method == "all_zero":
+            doc_feature_array = np.zeros((len(text_ls), embed_dim), dtype=np.float32)
+        elif method == 'avg_bow':
+            doc_feature_ls = []
+            for text in text_ls:
+                doc_embed_ls = []
+                words = text.split()
+                for word in words:
+                    if word in vocab_set:
+                        doc_embed_ls.append(word_embedding[word2idx[word]])
+                    else:
+                        doc_embed_ls.append(random_embed)
+                doc_embed = np.array(doc_embed_ls).mean(axis=0)
+                doc_feature_ls.append(doc_embed)
+            
+            doc_feature_array = np.array(doc_feature_ls)
+        else:
+            raise ValueError("method {} is not defined".format(method))
+        
+        if sparse:
+            doc_feature_array = sp.csr_matrix(doc_feature_array, dtype=np.float32)
+        
+        return doc_feature_array
+                    
+    @staticmethod        
+    def build_onehot_label(label_ls, label2idx):
+        label_num = len(label2idx)
+        label_onehot_ls = []
+        for label in label_ls:
+            onehot = [0 for _ in range(label_num)]
+            onehot[label] = 1
+            label_onehot_ls.append(onehot)
+        return np.array(label_onehot_ls)
 
 
 """
 A class to get document statistics, like tf-idf for NLP tasks.
 """
 class DocumentStatsBuilder():
-    """
-    Build the inverted index for a list of document.
-
-    Args:
-        doc_words_ls: A list of document, each document is a string of words seperated
-                      by space.
-        word2idx: A dictm mapping from word to index.
-    Return: 
-        a dict represents the inverted index, both the word and the docs are
-        in index format (numericalized).
-        Example: {
-            word_1_idx: [doc_1_idx, doc_2_idx, doc_4_idx]
-            word_2_idx: [doc_2, doc_3]
-        }
-    """
     @staticmethod
     def build_inverted_index(doc_words_ls, word2idx):
+        """
+        Build the inverted index for a list of document.
+
+        Args:
+            doc_words_ls: A list of document, each document is a string of words 
+                          seperated by space.
+            word2idx: A dictm mapping from word to index.
+        Return: 
+            a dict represents the inverted index, both the word and the docs are
+            in index format (numericalized).
+            
+            Example: {
+                word_1_idx: [doc_1_idx, doc_2_idx, doc_4_idx]
+                word_2_idx: [doc_2, doc_3]
+            }
+        """
         inverted_index = {}        
         for doc_idx, doc_words in enumerate(doc_words_ls):
             appeared = set()
@@ -42,6 +108,16 @@ class DocumentStatsBuilder():
 
     @staticmethod
     def doc_freq(doc_words_ls, word2idx, inverted_index=None):
+        """
+        Return:
+            a dict mapping word to its document frequency 
+            (count of docs containing the word) in a corpus.
+
+            Example: {
+                word_1_idx: 4
+                word_2_idx: 2
+            }
+        """
         doc_freq = {}
 
         if inverted_index is None:
@@ -79,7 +155,27 @@ class DocumentStatsBuilder():
         return term_freq
 
     @staticmethod
+    def TF_IDF(text_ls, word2idx):
+        """
+        
+        """
+        doc_cnt = len(text_ls)
+        doc_freq = DocumentStatsBuilder.doc_freq(text_ls, word2idx)
+        term_freq = DocumentStatsBuilder.term_freq(text_ls, word2idx)
+        TF_IDF = {}
+        
+        for (doc_i, word_j), tf in term_freq.items():
+            TF_IDF[(doc_i, word_j)] = tf * m.log(doc_cnt / doc_freq[word_j])
+
+        return TF_IDF
+
+    @staticmethod
     def PMI(doc_words_ls, word2idx, window_size):
+        """
+            Calculate the PMI between words in a corpus.
+            
+            Return A dict mapping (word_i, word_j) -> PMI
+        """
         if window_size < 2:
             raise ValueError("window size must be greater than 1.")
  
@@ -112,12 +208,13 @@ class DocumentStatsBuilder():
         return string.strip().lower()
 
     @staticmethod
-    def word_freq(text_ls):
+    def word_freq(text_ls, use_clean=True):
         word_freq = {}
 
         for text in text_ls:
-            clean_text = DocumentStatsBuilder.clean_str(text)
-            words = clean_text.split()
+            if use_clean:
+                text = DocumentStatsBuilder.clean_str(text)
+            words = text.split()
             for word in words:
                 if word in word_freq:
                     word_freq[word] += 1
@@ -189,9 +286,6 @@ class DocumentStatsBuilder():
                         word_pair_count[word_pair] = 1
 
         return word_pair_count
-
-
-
 
 
 """

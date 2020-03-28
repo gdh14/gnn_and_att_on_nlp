@@ -1,5 +1,9 @@
 # ignore data file
-*data/*
+data/*
 
 # cache file
 *.pyc
+
+# test file
+*test.py
+git 
