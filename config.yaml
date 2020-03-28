@@ -5,8 +5,8 @@ preprocess:
     val_split_ratio: 0.1
     min_word_freq: 5
     dataset: '20ng'
-    train_data_dir: './data/20NG/20news-bydate-train'
-    test_data_dir: './data/20NG/20news-bydate-test'
+    train_data_dir: './data/20ng/20news-bydate-train'
+    test_data_dir: './data/20ng/20news-bydate-test'
     graph_root_dir: './data/'
     data_root_dir: './data/'
     embed_dim: 300
