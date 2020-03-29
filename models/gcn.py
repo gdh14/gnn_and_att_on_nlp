@@ -8,20 +8,21 @@ class GCNLayer(nn.Module):
         super(GCNLayer, self).__init__()
         self.A_norm = A_norm
         self.featureless = featureless
-        self.W = nn.Parameter(torch.randn(input_dim, output_dim))
-        self.relu = nn.ReLU() if relu else None
+        self.W = nn.Parameter(torch.randn(input_dim, output_dim)) # (feat, 200)
+        self.relu = nn.ReLU() if relu else None 
         self.dropout = nn.Dropout(dropout)
 
         
     def forward(self, x):
         x = self.dropout(x)
-        x = self.W if self.featureless else x.mm(self.W)
-        out = self.A_norm.mm(x)
+        x = self.W if self.featureless else x.mm(self.W) 
+        out = self.A_norm.mm(x)  # (feat, feat) * (feat, feat) -> (feat, feat)
         
         if self.relu is not None:
             out = self.relu(out)
 
         self.embedding = out
+        breakpoint()
         return out
 
 
@@ -40,4 +41,3 @@ class TextGCN(nn.Module):
         out = self.layer1(x)
         out = self.layer2(out)
         return out
-    

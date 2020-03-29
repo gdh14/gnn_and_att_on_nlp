@@ -11,6 +11,7 @@ import numpy as np
 
 from utils.utils import *
 from models.gcn import TextGCN
+from models.gat import GAT
 from models.mlp import MLP
 
 from config import CONFIG
@@ -36,6 +37,7 @@ torch.manual_seed(seed)
 #     torch.cuda.manual_seed(seed)
 
 
+
 # Settings
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
@@ -59,8 +61,12 @@ elif cfg.model == 'dense':
     support = [preprocess_adj(adj)]  # Not used
     num_supports = 1
     model_func = MLP
+elif cfg.model == 'gat':
+    support = preprocess_adj(adj)    
+    pass
 else:
     raise ValueError('Invalid argument for model: ' + str(cfg.model))
+
 
 
 # Define placeholders
@@ -71,7 +77,6 @@ t_y_test = torch.from_numpy(y_test)
 t_train_mask = torch.from_numpy(train_mask.astype(np.float32))
 tm_train_mask = torch.transpose(torch.unsqueeze(t_train_mask, 0), 1, 0).repeat(1, y_train.shape[1])
 
-import pdb; pdb.set_trace()
 
 t_support = torch.Tensor(support)
 
@@ -85,9 +90,21 @@ t_support = torch.Tensor(support)
 #     tm_train_mask = tm_train_mask.cuda()
 #     for i in range(len(support)):
 #         t_support = [t.cuda() for t in t_support if True]
-        
-model = model_func(input_dim=features.shape[0], A_norm=t_support, num_classes=y_train.shape[1])
 
+
+
+if cfg.model == 'gat':
+    print('GAT model')
+    model = GAT(nfeat=t_features.shape[1], 
+                nhid=8, 
+                nclass=20, 
+                dropout=0.6, 
+                nheads=8, 
+                alpha=0.2,
+                adj=support)
+
+else:
+    model = model_func(input_dim=features.shape[0], A_norm=t_support, num_classes=y_train.shape[1])
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
@@ -114,7 +131,6 @@ def evaluate(features, labels, mask):
 
 
 val_losses = []
-
 
 
 # Train model
