@@ -3,6 +3,7 @@ Preprocessing script, need to be further optimized.
 """
 
 import os
+import sys
 import yaml
 import numpy as np
 import scipy.sparse as sp
@@ -12,17 +13,20 @@ from preprocess.utils import TextConverter, IOHelper
 from preprocess.data import TextDataForTC
 from preprocess.build_feature import TextHeteroGraphBuilder
 
+if len(sys.argv) != 2:
+    sys.exit("Use: python train.py <dataset>")
+
+
 def main():
     start = time()
     # parse config
-    config_file = 'config.yaml'
+    config_file = sys.argv[1] #'config.yaml'  
     config = yaml.load(open(config_file), Loader=yaml.FullLoader)
     data_root_dir = config['preprocess']['data_root_dir']
     dataset = config['preprocess']['dataset']
 
     # generate text data
-    text_data = TextDataForTC(config_file, '20ng')
-
+    text_data = TextDataForTC(config_file, dataset)
     # generate feature and label data [x, y, tx, ty, allx, ally]
     label2idx = text_data.get_label2idx()
     vocab = text_data.get_vocab()

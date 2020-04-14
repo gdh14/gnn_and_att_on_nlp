@@ -47,11 +47,13 @@ def batchify_test(data):
     X = pad(X, seq_lengths, pad_after=True)
     return X, Y
 
-def text_2_int_list(ls, vocab_dict):
+def text_2_int_list(ls, vocab_dict, max_len=None):
     """ map list of strings to list of list of ints """
     result = []
     for t in ls:
-        sent = t.split()
+        sent = t.split() 
+        if max_len is not None:
+             sent = sent[:max_len]            
         ints = [vocab_dict[w] if w in vocab_dict else vocab_dict["<unk>"] for w in sent]
         result.append(ints)
     return result

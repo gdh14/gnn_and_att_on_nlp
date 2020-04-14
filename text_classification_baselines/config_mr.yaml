@@ -1,17 +1,17 @@
 preprocess:
-    remove_stop_words: True
+    remove_stop_words: False
     train_random_seed: 1
     test_random_seed: 2
     val_split_ratio: 0.1
-    min_word_freq: 5
-    dataset: '20ng'
-    train_data_dir: '../data/20ng/20news-bydate-train'
-    test_data_dir: '../data/20ng/20news-bydate-test'
+    min_word_freq: 1
+    dataset: 'mr'
+    train_data_dir: '../data/mr/train'
+    test_data_dir: '../data/mr/test'
     graph_root_dir: '../data/'
     data_root_dir: '../data/'
+    embed_dim: 300
     window_size_for_PMI: 20 
     min_PMI: 0
-    embed_dim: 300
     word_word_edge_weight: 'PMI'
     doc_word_edge_weight: 'TF-IDF'
 training:

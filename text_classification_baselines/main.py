@@ -49,8 +49,6 @@ def train_epoch(epoch, model, optimizer, criterion):
         if torch.cuda.is_available(): x, y = x.cuda(), y.cuda()
         optimizer.zero_grad()
         out = model(x)
-#         if i % 100 == 99:
-#             import pdb; pdb.set_trace()
         preds.extend(out.argmax(axis=1).cpu().detach().tolist())
         loss = criterion(out, y)
         loss.backward()
@@ -142,9 +140,9 @@ w2i["<unk>"] = len(w2i)
 
 print("dataloaded...time taken: " + str(time.time() - start))
 
-train_x = text_2_int_list(text_ls_train, w2i)
-valid_x = text_2_int_list(text_ls_val, w2i)
-test_x  = text_2_int_list(text_ls_test, w2i)
+train_x = text_2_int_list(text_ls_train, w2i, args["max_doc_len"])
+valid_x = text_2_int_list(text_ls_val, w2i, args["max_doc_len"])
+test_x  = text_2_int_list(text_ls_test, w2i, args["max_doc_len"])
 
 # datasets 
 train = MyDataset(train_x, label_ls_train)

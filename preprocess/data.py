@@ -214,8 +214,25 @@ class TextDataForTC(TextData):
     def load_data(self, data_dir, **kargs):
         if kargs['cls_task'] == '20ng':
             text_ls, label_ls = self._load_data_from_folder(data_dir)
+            
+        elif kargs['cls_task'] == 'mr':
+            text_ls, label_ls = self._load_mr_data(data_dir)
         return text_ls, label_ls
-
+    
+    def _load_mr_data(self, data_dir):
+        self.label2idx = {'positive': 1, 'negative': 0}
+        text_ls = self._load_data_from_file('{}/text.txt'.format(data_dir))
+        label_ls = self._load_data_from_file('{}/label.txt'.format(data_dir))
+        label_ls = list(map(int, label_ls))
+        return text_ls, label_ls
+        
+    def _load_data_from_file(self, data_dir):
+        result = []
+        with open(data_dir, 'r', encoding='latin1') as f:
+            for line in f:
+                result.append(line.strip())
+        return result
+        
     def _load_data_from_folder(self, data_dir):
         all_text_ls = []
         all_label_ls = []

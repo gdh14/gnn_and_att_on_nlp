@@ -71,8 +71,6 @@ t_y_test = torch.from_numpy(y_test)
 t_train_mask = torch.from_numpy(train_mask.astype(np.float32))
 tm_train_mask = torch.transpose(torch.unsqueeze(t_train_mask, 0), 1, 0).repeat(1, y_train.shape[1])
 
-import pdb; pdb.set_trace()
-
 t_support = torch.Tensor(support)
 
 # if torch.cuda.is_available():
@@ -110,8 +108,6 @@ def evaluate(features, labels, mask):
         acc = ((pred == torch.max(labels, 1)[1]).float() * t_mask).sum().item() / t_mask.sum().item()
         
     return loss.numpy(), acc, pred.numpy(), labels.numpy(), (time.time() - t_test)
-
-
 
 val_losses = []
 
