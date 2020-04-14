@@ -5,25 +5,25 @@ import torch.nn.functional as F
 # from utils.word_embedding import embedding
 from torch.nn.utils import weight_norm
 
-class LSTM_clf(nn.Module):
+# class LSTM_clf(nn.Module):
+    
+#   def __init__(self, embed_dim, hidden_dim, vocab_size, out_size, 
+#                layers=1, bidirectional=False):
+#     super(LSTM_clf, self).__init__()
+#     self.word_embedding = nn.Embedding(vocab_size, embed_dim)
+#     self.net = nn.LSTM(embed_dim, hidden_dim,  num_layers=layers, 
+#                        bidirectional=bidirectional, dropout=0.5)
+#     self.relu = nn.ReLU()
+#     self.bn = nn.BatchNorm1d(hidden_dim * (int(bidirectional) + 1))
+#     self.linear = nn.Linear(hidden_dim * (int(bidirectional) + 1), out_size)
 
-  def __init__(self, embed_dim, hidden_dim, vocab_size, out_size, 
-               layers=1, bidirectional=False):
-    super(LSTM_clf, self).__init__()
-    self.word_embedding = nn.Embedding(vocab_size, embed_dim)
-    self.net = nn.LSTM(embed_dim, hidden_dim,  num_layers=layers, 
-                       bidirectional=bidirectional, dropout=0.5)
-    self.relu = nn.ReLU()
-    self.bn = nn.BatchNorm1d(hidden_dim * (int(bidirectional) + 1))
-    self.linear = nn.Linear(hidden_dim * (int(bidirectional) + 1), out_size)
-
-  def forward(self, x):
-    out = self.word_embedding(x)
-    out = self.net(out)[0]
-    out = self.relu(out).transpose(1,2)
-    out = F.max_pool1d(out, out.size()[2]).squeeze()
-    out = self.linear(self.bn(out))
-    return out
+#   def forward(self, x):
+#     out = self.word_embedding(x)
+#     out = self.net(out)[0]
+#     out = self.relu(out).transpose(1,2)
+#     out = F.max_pool1d(out, out.size()[2]).squeeze()
+#     out = self.linear(self.bn(out))
+#     return out
 
 class DCNN_block(nn.Module):
   
@@ -264,6 +264,7 @@ class LSTM_clf(nn.Module):
 
     def forward(self, x):
         out = self.word_embedding(x)
+#         import pdb; pdb.set_trace()
         out = self.net(out)[0]
         out = self.relu(out).transpose(1,2)
         out = F.max_pool1d(out, out.size()[2]).squeeze()

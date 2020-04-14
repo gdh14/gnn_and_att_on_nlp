@@ -44,10 +44,13 @@ def train_epoch(epoch, model, optimizer, criterion):
     labels = []
     counter = 0
     for i, (x, y) in enumerate(train_loader):
+        if x.shape[1] > 400:
+            print(x.shape)
         n_data += x.size()[0]
         labels.extend(y.cpu().detach().tolist())
         if torch.cuda.is_available(): x, y = x.cuda(), y.cuda()
         optimizer.zero_grad()
+#         import pdb; pdb.set_trace()
         out = model(x)
         preds.extend(out.argmax(axis=1).cpu().detach().tolist())
         loss = criterion(out, y)
@@ -57,11 +60,8 @@ def train_epoch(epoch, model, optimizer, criterion):
         train_loss += loss
         counter += 1
         
-#         if i % print_iter == print_iter - 1:
-#             model, valid_preds, valid_labels, valid_loss = validate(model, criterion)
-#             print("epoch {} - batch [{}/{}] - valid loss: {:.2f} - valid acc: {:.2f}".format(
-#                 epoch, i, len(train_loader), valid_loss, accuracy(valid_preds, valid_labels)))
         if i % print_iter == print_iter - 1:
+            
             model, valid_preds, valid_labels, valid_loss = validate(model, criterion)
             print("""epoch {} - batch [{}/{}] - train loss: {:.2f} - acc: {:.3f} - valid loss : {:.2f} - acc : {:.3f} time taken: {:.2f}""".format(epoch, i, 
                 len(train_loader), train_loss/counter,#(i+1),
@@ -72,7 +72,8 @@ def train_epoch(epoch, model, optimizer, criterion):
             model.train()
             start = time.time()
             train_loss, counter = 0, 0
-
+    
+#     import pdb; pdb.set_trace()
     model, valid_preds, valid_labels, valid_loss = validate(model, criterion)
     print("""epoch {} - batch [{}/{}] - train loss: {:.2f} - acc: {:.3f} - valid loss : {:.2f} - acc : {:.3f} time taken: {:.2f}""".format(epoch, i, 
         len(train_loader), train_loss/(i+1),
@@ -82,7 +83,7 @@ def train_epoch(epoch, model, optimizer, criterion):
 
 def learning_rate_decay(optimizer):
     for param_group in optimizer.param_groups:
-        param_group['lr'] = param_group['lr'] * 0.1
+        param_group['lr'] = param_group['lr'] * 0.9
     return optimizer
 
 def training(model, epoches, lr, wd):
@@ -119,12 +120,13 @@ def predict(model, loader):
         preds.extend(out.cpu().detach().argmax(axis=1).tolist())
     return preds
 
+
 # data prep
 start = time.time()
-config_file = 'config.yaml'
+config_file = sys.argv[1] #'config.yaml'  
 config = yaml.load(open(config_file), Loader=yaml.FullLoader)
 args = config["training"]
-text_data = TextDataForTC(config_file, '20ng')
+text_data = TextDataForTC(config_file, config['preprocess']['dataset'])
 label2idx = text_data.get_label2idx()
 vocab = text_data.get_vocab()
 word2idx = vocab.get_word2idx()
@@ -176,7 +178,7 @@ print("dataloader created...")
 if args["model"] == 'lstm':
     from models.classifiers import LSTM_clf
     model = LSTM_clf(embed_dim, nhid, vocab_size, nclass, nlayers)
-
+    
 elif args["model"] == 'transformer':
     from models.classifiers import TransformerModel
     model = TransformerModel(nclass, embed_dim, nhead, nhid, nlayers, len(w2i), dropout)

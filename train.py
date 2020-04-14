@@ -73,8 +73,10 @@ tm_train_mask = torch.transpose(torch.unsqueeze(t_train_mask, 0), 1, 0).repeat(1
 
 t_support = torch.Tensor(support)
 
+model = model_func(input_dim=features.shape[0], A_norm=t_support, num_classes=y_train.shape[1])
+
 # if torch.cuda.is_available():
-#     model_func = model_func.cuda()
+#     model = model.cuda()
 #     t_features = t_features.cuda()
 #     t_y_train = t_y_train.cuda()
 #     t_y_val = t_y_val.cuda()
@@ -84,9 +86,7 @@ t_support = torch.Tensor(support)
 #     for i in range(len(support)):
 #         t_support = [t.cuda() for t in t_support if True]
         
-model = model_func(input_dim=features.shape[0], A_norm=t_support, num_classes=y_train.shape[1])
-
-
+        
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=cfg.learning_rate)

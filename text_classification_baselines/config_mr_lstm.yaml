@@ -1,0 +1,30 @@
+preprocess:
+    remove_stop_words: False
+    train_random_seed: 1
+    test_random_seed: 2
+    val_split_ratio: 0.1
+    min_word_freq: 1
+    dataset: 'mr'
+    train_data_dir: '../data/mr/train'
+    test_data_dir: '../data/mr/test'
+    graph_root_dir: '../data/'
+    data_root_dir: '../data/'
+    embed_dim: 300
+    window_size_for_PMI: 20 
+    min_PMI: 0
+    word_word_edge_weight: 'PMI'
+    doc_word_edge_weight: 'TF-IDF'
+training:
+    model: 'lstm'
+    embed_dim: 300
+    nhead: 5
+    nhid: 200
+    nlayers: 1
+    batch_size: 8
+    lr: 0.001
+    grad_clip: 10
+    print_iter: 400
+    dropout: 0.2
+    weight_decay: 0.0001
+    epochs: 10
+    max_doc_len: 860
