@@ -23,7 +23,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from IPython.core.debugger import set_trace
 from dataloader import MyDataset, batchify, batchify_test, text_2_int_list
-
+from utils.early_stopping import EarlyStopping
 
 
 ####################
@@ -36,7 +36,7 @@ def accuracy(preds, y):
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
-def train_epoch(epoch, model, optimizer, criterion):
+def train_epoch(epoch, model, optimizer, criterion, early_stopper=None):
     model.train()
     train_loss, n_data = 0, 0
     start = time.time()
@@ -70,8 +70,11 @@ def train_epoch(epoch, model, optimizer, criterion):
 
         
             model.train()
+            if early_stopper is not None:
+                early_stopper(valid_loss, model)
             start = time.time()
             train_loss, counter = 0, 0
+            
     
 #     import pdb; pdb.set_trace()
     model, valid_preds, valid_labels, valid_loss = validate(model, criterion)
@@ -79,6 +82,8 @@ def train_epoch(epoch, model, optimizer, criterion):
         len(train_loader), train_loss/(i+1),
         accuracy(preds, labels), valid_loss, accuracy(valid_preds, valid_labels),
         time.time()-start), flush=True)
+    if early_stopper is not None:
+        early_stopper(valid_loss, model)
     return model
 
 def learning_rate_decay(optimizer):
@@ -91,8 +96,9 @@ def training(model, epoches, lr, wd):
         model.cuda()
     optimizer = optim.AdamW(model.parameters(), lr=lr, weight_decay=wd)
     criterion = nn.CrossEntropyLoss()
+    early_stopper = EarlyStopping(model_dir, patience=5)
     for ep in range(epoches):
-        model = train_epoch(ep, model, optimizer, criterion)
+        model = train_epoch(ep, model, optimizer, criterion, early_stopper)
         optimizer = learning_rate_decay(optimizer)
     return model
 
@@ -192,3 +198,5 @@ print("num of model params: ", count_parameters(model))
     
 print("start training...")
 training(model, epochs, lr, wd)
+
+

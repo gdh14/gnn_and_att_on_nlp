@@ -18,7 +18,7 @@ training:
     model: 'transformer'
     embed_dim: 300
     nhead: 5
-    nhid: 500
+    nhid: 200
     nlayers: 2
     batch_size: 8
     lr: 0.0001

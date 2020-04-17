@@ -40,10 +40,16 @@ torch.manual_seed(seed)
 # os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 # Load data
+# hidden dim = 300
 adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask, train_size, test_size = load_corpus(
     cfg.dataset)
 
-features = sp.identity(features.shape[0], dtype=np.float32).A  # featureless
+print("Using onehot features? ", cfg.onehot_features)
+if not cfg.onehot_features:
+    features = features.toarray()
+else:
+    # embed dim = 29*** ..... one hot init
+    features = sp.identity(features.shape[0], dtype=np.float32).A  # featureless
 
 # Some preprocessing
 # features = preprocess_features(features)
@@ -51,14 +57,6 @@ if cfg.model == 'gcn':
     support = preprocess_adj(adj)
     num_supports = 1
     model_func = TextGCN
-elif cfg.model == 'gcn_cheby':
-    support = chebyshev_polynomials(adj, cfg.max_degree)
-    num_supports = 1 + cfg.max_degree
-    model_func = GCN
-elif cfg.model == 'dense':
-    support = [preprocess_adj(adj)]  # Not used
-    num_supports = 1
-    model_func = MLP
 else:
     raise ValueError('Invalid argument for model: ' + str(cfg.model))
 
@@ -73,7 +71,7 @@ tm_train_mask = torch.transpose(torch.unsqueeze(t_train_mask, 0), 1, 0).repeat(1
 
 t_support = torch.Tensor(support)
 
-model = model_func(input_dim=features.shape[0], A_norm=t_support, num_classes=y_train.shape[1])
+model = model_func(input_dim=features.shape[1], A_norm=t_support, num_classes=y_train.shape[1])
 
 # if torch.cuda.is_available():
 #     model = model.cuda()
@@ -163,6 +161,9 @@ print_log("Micro average Test Precision, Recall and F1-Score...")
 print_log(metrics.precision_recall_fscore_support(test_labels, test_pred, average='micro'))
 
 # doc and word embeddings
+# ######### - trining document embedding
+# ######### - word embeddings
+# ######### - test doc embeddings
 tmp = model.layer1.embedding.numpy()
 word_embeddings = tmp[train_size: adj.shape[0] - test_size]
 train_doc_embeddings = tmp[:train_size]  # include val docs
@@ -193,16 +194,22 @@ with open('./data/' + dataset + '_word_vectors.txt', 'w') as f:
 
 doc_vectors = []
 doc_id = 0
+y_train_labels = y_train[y_train.sum(axis=1)>0] # select the rows that is not 
+y_train_labels = y_train_labels.argmax(axis=1)
 for i in range(train_size):
     doc_vector = train_doc_embeddings[i]
     doc_vector_str = ' '.join([str(x) for x in doc_vector])
-    doc_vectors.append('doc_' + str(doc_id) + ' ' + doc_vector_str)
+    label = y_train_labels[i]
+    doc_vectors.append('doc_train_id_' + str(doc_id) + ' label:' + str(label) + ' ' + doc_vector_str)
     doc_id += 1
 
+y_test_labels = y_test[y_test.sum(axis=1)>0] # select the rows that is not 
+y_test_labels = y_test_labels.argmax(axis=1)
 for i in range(test_size):
     doc_vector = test_doc_embeddings[i]
     doc_vector_str = ' '.join([str(x) for x in doc_vector])
-    doc_vectors.append('doc_' + str(doc_id) + ' ' + doc_vector_str)
+    label = y_test_labels[i]
+    doc_vectors.append('doc_test_id_' + str(doc_id) + ' label:' + str(label) + ' '+ doc_vector_str)
     doc_id += 1
 
 doc_embeddings_str = '\n'.join(doc_vectors)

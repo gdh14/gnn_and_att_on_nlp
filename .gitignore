@@ -1,5 +1,6 @@
 # ignore data file
 data/*
+text_classification/data/*
 
 # cache file
 *.pyc

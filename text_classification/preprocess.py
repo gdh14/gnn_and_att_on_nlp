@@ -65,6 +65,8 @@ def main():
             os.path.join(data_root_dir, "ind.{}.ty".format(dataset)), 'pickle')    
     IOHelper.save_file(label_all,\
             os.path.join(data_root_dir, "ind.{}.ally".format(dataset)), 'pickle')    
+    IOHelper.save_file(vocab.get_vocab_ls(), \
+            os.path.join(data_root_dir, "corpus", "{}_vocab.txt".format(dataset)), 'txt')
 
     print("feature train shape {}".format(feature_train.shape))
     print("feature val shape {}".format(feature_val.shape))

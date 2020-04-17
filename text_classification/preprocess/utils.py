@@ -16,6 +16,11 @@ class IOHelper():
         if method == 'pickle':
             with open(file_dir, 'wb') as f:
                 pkl.dump(data, f)
+        elif method == 'txt':
+            if not isinstance(data, list): raise TypeError("data must be a list")
+            with open(file_dir, 'w') as f:
+                for elem in data:
+                    f.write('{}\n'.format(elem))
         else:
             raise ValueError("method {} is not defined to save the file".format(method))
 

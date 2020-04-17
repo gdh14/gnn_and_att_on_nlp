@@ -134,6 +134,16 @@ class DDCNN(nn.Module):
     out = self.linear(self.do(self.bn(torch.cat((dcnn_out,cnn_out), 1))))
     return out
 
+  def get_encoding(self, x):
+    """get the encoded vector before the last linear layer"""
+    out = self.word_embedding(x).transpose(1,2)
+    dcnn_out = self.dcnn(out)
+    cnn_out = self.cnn(out)
+    dcnn_out = F.max_pool1d(dcnn_out, dcnn_out.size()[2]).squeeze()
+    out = self.do(self.bn(torch.cat((dcnn_out,cnn_out), 1)))
+    return out
+    
+
 
 
 class MLP_block(nn.Module):
@@ -237,15 +247,26 @@ class TransformerModel(nn.Module):
 
         src = self.embed(src) * math.sqrt(self.ninp)
         src = self.pos_encoder(src)
-#         import pdb; pdb.set_trace()
         output = self.transformer_encoder(src).transpose(1,2)
-#         output, _ = self.transformer_encoder(src, self.src_mask).max(1)
-#         output_pool = self.pool(output.transpose(2,1)).view(len(output), -1)
-#         import pdb; pdb.set_trace()
-#         output = torch.cat([output_pool, output[:, -1, :].view(len(output), -1)], dim=1)
         output = F.max_pool1d(output, output.size()[2]).squeeze()
         output = self.decoder(output)
-        return output #F.log_softmax(output, dim=-1)
+        return output 
+    
+    def get_encoding(self, src, has_mask=False):
+        """get the encoded vector before the last linear layer"""
+        if has_mask:
+            device = src.device
+            if self.src_mask is None or self.src_mask.size(0) != len(src):
+                mask = self._generate_square_subsequent_mask(len(src)).to(device)
+                self.src_mask = mask
+        else:
+            self.src_mask = None
+
+        src = self.embed(src) * math.sqrt(self.ninp)
+        src = self.pos_encoder(src)
+        output = self.transformer_encoder(src).transpose(1,2)
+        output = F.max_pool1d(output, output.size()[2]).squeeze()
+        return output 
     
     
 from torch.nn.utils import weight_norm
@@ -264,11 +285,19 @@ class LSTM_clf(nn.Module):
 
     def forward(self, x):
         out = self.word_embedding(x)
-#         import pdb; pdb.set_trace()
         out = self.net(out)[0]
         out = self.relu(out).transpose(1,2)
         out = F.max_pool1d(out, out.size()[2]).squeeze()
         out = self.linear(self.bn(out))
+        return out
+    
+    def get_encoding(self, x):
+        """get the encoded vector before the last linear layer"""
+        out = self.word_embedding(x)
+        out = self.net(out)[0]
+        out = self.relu(out).transpose(1,2)
+        out = F.max_pool1d(out, out.size()[2]).squeeze()
+        out = self.bn(out)
         return out
     
     

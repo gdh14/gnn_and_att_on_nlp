@@ -26,13 +26,15 @@ class GCNLayer(nn.Module):
 
 
 class TextGCN(nn.Module):
-    def __init__(self, input_dim, A_norm, 
+    def __init__(self, input_dim, A_norm,
                  dropout=0., num_classes=20):
         super(TextGCN, self).__init__()
         
         # GraphConvolution
+#         self.layer1 = GCNLayer(input_dim, 200, A_norm, relu=True, 
+#                               featureless=True, dropout=dropout)
         self.layer1 = GCNLayer(input_dim, 200, A_norm, relu=True, 
-                              featureless=True, dropout=dropout)
+                              featureless=False, dropout=dropout)
         self.layer2 = GCNLayer(200, num_classes, A_norm, dropout=dropout)
         
     

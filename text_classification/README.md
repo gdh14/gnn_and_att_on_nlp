@@ -8,5 +8,5 @@ A Comparison between Graph and Attention Neural Models on Essential NLP Tasks.
 
 ## Training and Evaluation Process (Model borrows from torch_gcn.pytorch)
 
-1. Run `python preprocess.py`
+1. Run `python preprocess.py config_20ng.yaml`
 2. Run `python train.py 20ng`
