@@ -14,7 +14,7 @@ class CONFIG(object):
         self.weight_decay = 0.   # Weight for L2 loss on embedding matrix.
         self.early_stopping = 10 # Tolerance for early stopping (# of epochs).
         self.max_degree = 3      # Maximum Chebyshev polynomial degree.
-        self.onehot_features = True
+        self.onehot_features = True # True is better
 
 
 
