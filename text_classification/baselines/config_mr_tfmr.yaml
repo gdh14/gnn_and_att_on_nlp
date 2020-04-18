@@ -18,13 +18,15 @@ training:
     model: 'transformer'
     embed_dim: 300
     nhead: 5
-    nhid: 200
+    nhid: 500
     nlayers: 2
     batch_size: 8
     lr: 0.0001
     grad_clip: 10
-    print_iter: 400
+    print_iter: 100000
     dropout: 0.2
     weight_decay: 0 #0.0001
-    epochs: 10
+    epochs: 50
     max_doc_len: 860
+    model_dir: "saved_models"
+    id: 4

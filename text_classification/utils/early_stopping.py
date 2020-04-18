@@ -88,8 +88,7 @@ class EarlyStopping:
             print(f'Validation loss decreased ({self.val_loss_min:.6f} --> {val_loss:.6f}).  Saving model ...')
             
         checkpoint = {}
-        checkpoint['model'] = model.state_dict()   
-#         checkpoint['model'] = model
+        checkpoint['model_state_dict'] = model.state_dict()   
 
         torch.save(checkpoint, '{}/checkpoint.pt'.format(self.model_dir))
         if model_object:
