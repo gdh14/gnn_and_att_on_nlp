@@ -21,7 +21,7 @@ training:
     nhid: 200
     nlayers: 2
     batch_size: 8
-    lr: 0.001
+    lr: 0.0005
     grad_clip: 10
     print_iter: 10000
     dropout: 0.2
@@ -29,4 +29,5 @@ training:
     epochs: 50
     max_doc_len: 200
     model_dir: "saved_models"
-    id: 100
+    id: 200
+    lr_decay_ratio: 0.5

@@ -39,13 +39,13 @@ def batchify(data):
     seq_lengths = LongTensor([len(x) for x in X])
     X = pad(X, seq_lengths, pad_after=True)
     Y = LongTensor(Y)
-    return X, Y
+    return X, Y, seq_lengths
 
 def batchify_test(data):
     X, Y = tuple(map(list, zip(*data)))
     seq_lengths = LongTensor([len(x) for x in X])
     X = pad(X, seq_lengths, pad_after=True)
-    return X, Y
+    return X, Y, seq_lengths
 
 def text_2_int_list(ls, vocab_dict, max_len=None):
     """ map list of strings to list of list of ints """
