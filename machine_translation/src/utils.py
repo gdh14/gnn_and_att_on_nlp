@@ -82,7 +82,7 @@ def count_parameters(model):
 
 def learning_rate_decay(optimizer, lr_decay_ratio=0.9, min_lr=0.00001):
     for param_group in optimizer.param_groups:
-        param_group['lr'] = max(param_group['lr'] * lr_decay_ratio)
+        param_group['lr'] = max(param_group['lr'] * lr_decay_ratio, min_lr)
     return optimizer
 
 # logging

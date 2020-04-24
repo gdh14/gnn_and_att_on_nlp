@@ -1,4 +1,4 @@
-import spacy, random, math, time, yaml, sys
+import spacy, random, math, time, yaml, sys, os
 import numpy as np
 from tqdm import tqdm
 import torch
@@ -166,7 +166,8 @@ for epoch in range(N_EPOCHS):
     
     
 # testing
-model.load_state_dict(torch.load(MODEL_PATH))
+state_dict = torch.load(os.path.join(MODEL_PATH, "checkpoint.pt"))['model_state_dict']
+model.load_state_dict(state_dict)
 test_loss = evaluate(model, test_iterator, criterion)
 print(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
 logger.write(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
