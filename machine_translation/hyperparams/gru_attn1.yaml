@@ -1,0 +1,19 @@
+training: 
+    seed: 11747
+    dataset: "Multi30k"  # Multi30k or ISWLT
+    model: "gru_attn**2"  # gru**2, gru_attn**2, transformer, gcn_gru
+    reverse: True
+    batch_size: 128
+    encoder_embed_dim: 250
+    decoder_embed_dim: 250
+    encoder_hidden_dim: 500
+    decoder_hidden_dim: 500
+    encoder_dropout: 0.5
+    decoder_dropout: 0.5
+    num_layers: 2
+    num_epochs: 2
+    grad_clip: 1
+    lr: 0.001
+    lr_decay_ratio: 0.9
+    id: 1
+    patience: 5

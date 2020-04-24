@@ -25,9 +25,9 @@ class Attention(nn.Module):
         return F.softmax(attn, dim=1)
     
     
-class Encoder(nn.Module):
+class GRUEncoder(nn.Module):
     def __init__(self, ninp, nembed, enc_nhid, dec_nhid, nlayers, dropout=0.2):
-        super(Encoder, self).__init__()
+        super(GRUEncoder, self).__init__()
         self.embedding = nn.Embedding(ninp, nembed)
         self.nlayers = nlayers
         self.rnn = nn.GRU(nembed, enc_nhid, nlayers, dropout=dropout, bidirectional=True)
@@ -45,9 +45,9 @@ class Encoder(nn.Module):
         return out, hidden
     
     
-class Decoder(nn.Module):
+class GRUDecoder(nn.Module):
     def __init__(self, nout, nembed, enc_nhid, dec_nhid, nlayers, dropout=0.2, attention=None):
-        super(Decoder, self).__init__()
+        super(GRUDecoder, self).__init__()
         self.nout = nout
         self.nlayers = nlayers
         self.embedding = nn.Embedding(nout, nembed)

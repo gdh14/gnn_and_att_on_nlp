@@ -29,7 +29,33 @@ class GCNLayer(nn.Module):
         x = x.matmul(self.W) + self.b
         x = self.relu(x)
         return x
-    
-def initialize_weights(m):
-    if hasattr(m, 'weight') and m.weight.dim() > 1:
-        nn.init.xavier_uniform_(m.weight.data)
+        
+        
+class GCNEncoder(nn.Module):
+    def __init__(self, ninp, nembed, nhid, nlayers, dropout):
+        super(GCNEncoder, self).__init__()
+        self.nhid = nhid
+        self.nlayers = nlayers
+        self.embedding = nn.Embedding(ninp, nembed)
+        assert(nlayers > 0)
+        layers = [GCNLayer(nembed, nhid)] + [GCNLayer(nhid, nhid) for _ in range(nlayers-1)]
+        self.layers = nn.ModuleList(layers)
+        self.linear = nn.Linear(2*nhid, nhid)
+        self.dropout = nn.Dropout(dropout)
+        
+    def forward(self, x, A):
+        """
+        x: (b, seq len)
+        A: (b, seq len, seq len)
+        """
+        x = self.embedding(x)  # x: (b, seq len, ninp)
+        x = self.dropout(x)
+        for layer in self.layers:
+            x = layer(x, A)
+            
+        # pooling
+        mean = x.mean(dim=1)
+        maxm = x.max(dim=1)[0]
+        x = torch.cat((mean, maxm), dim=1)
+        out = self.linear(self.dropout(x))
+        return out
