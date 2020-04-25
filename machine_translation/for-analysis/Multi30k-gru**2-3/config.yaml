@@ -1,0 +1,19 @@
+training:
+  batch_size: 128
+  dataset: Multi30k
+  decoder_dropout: 0.2
+  decoder_embed_dim: 300
+  decoder_hidden_dim: 600
+  encoder_dropout: 0.2
+  encoder_embed_dim: 300
+  encoder_hidden_dim: 600
+  grad_clip: 1
+  id: 3
+  lr: 0.001
+  lr_decay_ratio: 0.9
+  model: gru**2
+  num_epochs: 10
+  num_layers: 2
+  patience: 5
+  reverse: true
+  seed: 11747

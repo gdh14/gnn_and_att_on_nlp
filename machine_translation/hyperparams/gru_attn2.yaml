@@ -6,8 +6,8 @@ training:
     batch_size: 64
     encoder_embed_dim: 300
     decoder_embed_dim: 300
-    encoder_hidden_dim: 500
-    decoder_hidden_dim: 500
+    encoder_hidden_dim: 300
+    decoder_hidden_dim: 300
     encoder_dropout: 0.5
     decoder_dropout: 0.5
     num_layers: 3
@@ -15,5 +15,5 @@ training:
     grad_clip: 1
     lr: 0.001
     lr_decay_ratio: 0.95
-    id: 1
+    id: 2
     patience: 5

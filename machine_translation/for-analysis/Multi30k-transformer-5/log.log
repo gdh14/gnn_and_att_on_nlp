@@ -1,0 +1,62 @@
+Start logging - 2020-04-24-13-51-16
+Epoch: 01 | Time: 0m -25s
+	Train Loss: 3.903 | Train PPL:  49.537
+	 Val. Loss: 2.010 |  Val. PPL:   7.463
+Epoch: 02 | Time: 0m -26s
+	Train Loss: 1.559 | Train PPL:   4.754
+	 Val. Loss: 0.582 |  Val. PPL:   1.790
+Epoch: 03 | Time: 0m -26s
+	Train Loss: 0.572 | Train PPL:   1.772
+	 Val. Loss: 0.193 |  Val. PPL:   1.213
+Epoch: 04 | Time: 0m -25s
+	Train Loss: 0.247 | Train PPL:   1.280
+	 Val. Loss: 0.083 |  Val. PPL:   1.087
+Epoch: 05 | Time: 0m -25s
+	Train Loss: 0.122 | Train PPL:   1.130
+	 Val. Loss: 0.042 |  Val. PPL:   1.043
+Epoch: 06 | Time: 0m -25s
+	Train Loss: 0.065 | Train PPL:   1.067
+	 Val. Loss: 0.020 |  Val. PPL:   1.020
+Epoch: 07 | Time: 0m -25s
+	Train Loss: 0.036 | Train PPL:   1.037
+	 Val. Loss: 0.013 |  Val. PPL:   1.014
+Epoch: 08 | Time: 0m -25s
+	Train Loss: 0.021 | Train PPL:   1.021
+	 Val. Loss: 0.009 |  Val. PPL:   1.009
+Epoch: 09 | Time: 0m -25s
+	Train Loss: 0.013 | Train PPL:   1.013
+	 Val. Loss: 0.006 |  Val. PPL:   1.006
+Epoch: 10 | Time: 0m -25s
+	Train Loss: 0.009 | Train PPL:   1.009
+	 Val. Loss: 0.005 |  Val. PPL:   1.005
+Epoch: 11 | Time: 0m -25s
+	Train Loss: 0.007 | Train PPL:   1.007
+	 Val. Loss: 0.005 |  Val. PPL:   1.005
+Epoch: 12 | Time: 0m -25s
+	Train Loss: 0.005 | Train PPL:   1.005
+	 Val. Loss: 0.005 |  Val. PPL:   1.005
+Epoch: 13 | Time: 0m -25s
+	Train Loss: 0.004 | Train PPL:   1.004
+	 Val. Loss: 0.005 |  Val. PPL:   1.005
+Epoch: 14 | Time: 0m -25s
+	Train Loss: 0.004 | Train PPL:   1.004
+	 Val. Loss: 0.004 |  Val. PPL:   1.004
+Epoch: 15 | Time: 0m -25s
+	Train Loss: 0.003 | Train PPL:   1.003
+	 Val. Loss: 0.004 |  Val. PPL:   1.004
+Epoch: 16 | Time: 0m -25s
+	Train Loss: 0.002 | Train PPL:   1.002
+	 Val. Loss: 0.003 |  Val. PPL:   1.003
+Epoch: 17 | Time: 0m -25s
+	Train Loss: 0.002 | Train PPL:   1.002
+	 Val. Loss: 0.003 |  Val. PPL:   1.003
+Epoch: 18 | Time: 0m -25s
+	Train Loss: 0.002 | Train PPL:   1.002
+	 Val. Loss: 0.003 |  Val. PPL:   1.003
+Epoch: 19 | Time: 0m -24s
+	Train Loss: 0.002 | Train PPL:   1.002
+	 Val. Loss: 0.004 |  Val. PPL:   1.004
+Epoch: 20 | Time: 0m -24s
+	Train Loss: 0.001 | Train PPL:   1.001
+	 Val. Loss: 0.003 |  Val. PPL:   1.003
+| Test Loss: 0.000 | Test PPL:   1.000 |

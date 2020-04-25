@@ -67,16 +67,18 @@ def counter2array(counter):
         result.extend([k for _ in range(counter[k])])
     return np.array(result)
 
-
 # models
 
-def initialize_weights(m):
+def init_weights_xavier(m):
     if hasattr(m, 'weight') and m.weight.dim() > 1:
         nn.init.xavier_uniform_(m.weight.data)
         
+def init_weights_uniform(m):
+    for name, param in m.named_parameters():
+        nn.init.uniform_(param.data, -0.08, 0.08)
+                
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
-
 
 # training
 
@@ -101,3 +103,4 @@ def print_status(logger, epoch, epoch_mins, epoch_secs, train_loss, valid_loss):
     logger.write(f'Epoch: {epoch+1:02} | Time: {epoch_mins}m {epoch_secs}s')
     logger.write(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
     logger.write(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}')
+    

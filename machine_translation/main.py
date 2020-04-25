@@ -10,8 +10,8 @@ from torchtext.data import Field, BucketIterator, RawField, Dataset
 
 from models.gcn import GCNLayer
 from src.utils import set_seed, tokenize_de, tokenize_en, batch_graph, \
-initialize_weights, get_sentence_lengths, counter2array, ensure_path_exist, \
-print_status, learning_rate_decay
+get_sentence_lengths, counter2array, ensure_path_exist, \
+print_status, learning_rate_decay, count_parameters
 from src.early_stopping import EarlyStopping
 from src.logging import Logger
 
@@ -120,9 +120,9 @@ elif MODEL == "gru_attn**2":
     dec = GRUDecoder(OUTPUT_DIM, DEC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, DEC_DROPOUT, attn)
     model = Seq2Seq(enc, dec, device).to(device)
     
-    from src.train import train_epoch_gru, evaluate_gru, epoch_time
-    train_epoch = train_epoch_gru
-    evaluate = evaluate_gru
+    from src.train import train_epoch_gru_attn, evaluate_gru_attn, epoch_time
+    train_epoch = train_epoch_gru_attn
+    evaluate = evaluate_gru_attn
     
 elif MODEL == "transformer":
     from models.transformer import Encoder, Decoder, Seq2Seq
@@ -137,24 +137,53 @@ elif MODEL == "transformer":
     evaluate = evaluate_tfmr
     
 elif MODEL == "gcn_gru":
-    raise NotImplemented()
+    from models.gru_seq2seq import GCNEncoder, GRUDecoder, GCN2Seq
+    enc = GCNEncoder(INPUT_DIM, ENC_EMB_DIM, ENC_HID_DIM, NLAYERS, ENC_DROPOUT)
+    dec = GRUDecoder(OUTPUT_DIM, DEC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, DEC_DROPOUT)
+    model = GCN2Seq(enc, dec, device).to(device)
+    
+    from src.train import train_epoch_gcn_gru, evaluate_gcn_gru, epoch_time
+    train_epoch = train_epoch_gcn_gru
+    evaluate = evaluate_gcn_gru
+    
+elif MODEL == "gcngru_gru":
+    from models.gru_seq2seq import GCNGRUEncoder, GRUDecoder, GCN2Seq
+    enc = GCNGRUEncoder(INPUT_DIM, ENC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, ENC_DROPOUT, device)
+    dec = GRUDecoder(OUTPUT_DIM, DEC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, DEC_DROPOUT)
+    model = GCN2Seq(enc, dec, device).to(device)
+    
+    from src.train import train_epoch_gcn_gru, evaluate_gcn_gru, epoch_time
+    train_epoch = train_epoch_gcn_gru
+    evaluate = evaluate_gcn_gru
     
 else:
     raise ValueError("Wrong model choice")
 
-model.apply(initialize_weights)
-# training
+if 'gcn' in MODEL:
+    from src.utils import init_weights_uniform as init_weights
+else: 
+    from src.utils import init_weights_xavier as init_weights
+    
+model.apply(init_weights)
+n_params = count_parameters(model)
+print(f'The model has {n_params:,} trainable parameters')
 
+# training
 optimizer = optim.Adam(model.parameters(), lr=LR)
 criterion = nn.CrossEntropyLoss(ignore_index=TGT_PAD_IDX)
 best_valid_loss = float('inf')
 early_stopper = EarlyStopping(MODEL_PATH, patience=PATIENCE)
 logger = Logger(LOG_PATH, append_time=False)
+logger.write(f'The model has {n_params:,} trainable parameters')
 
 for epoch in range(N_EPOCHS):
     start_time = time.time()
     train_loss = train_epoch(model, train_iterator, optimizer, criterion, CLIP)
-    valid_loss = evaluate(model, valid_iterator, criterion)
+    if MODEL in ["gru_attn**2", "transformer"]:
+        valid_loss, attns = evaluate(model, valid_iterator, criterion)
+    else:
+        valid_loss = evaluate(model, valid_iterator, criterion)
+        
     end_time = time.time()
     epoch_mins, epoch_secs = epoch_time(start_time, end_time)
     
@@ -168,7 +197,12 @@ for epoch in range(N_EPOCHS):
 # testing
 state_dict = torch.load(os.path.join(MODEL_PATH, "checkpoint.pt"))['model_state_dict']
 model.load_state_dict(state_dict)
-test_loss = evaluate(model, test_iterator, criterion)
+
+if MODEL in ["gru_attn**2", "transformer"]:
+    test_loss, attns = evaluate(model, test_iterator, criterion)
+else:
+    test_loss = evaluate(model, test_iterator, criterion)
+    
 print(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
 logger.write(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
 

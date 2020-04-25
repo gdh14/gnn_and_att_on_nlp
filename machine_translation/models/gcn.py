@@ -45,17 +45,24 @@ class GCNEncoder(nn.Module):
         
     def forward(self, x, A):
         """
-        x: (b, seq len)
+        x: (seq len, b)
         A: (b, seq len, seq len)
         """
+        x = x.t()
+        b = x.shape[0]
         x = self.embedding(x)  # x: (b, seq len, ninp)
         x = self.dropout(x)
+        hidden = []
         for layer in self.layers:
-            x = layer(x, A)
+            x = layer(x, A) 
+            hidden.append(x[:,0,:])
             
         # pooling
         mean = x.mean(dim=1)
         maxm = x.max(dim=1)[0]
         x = torch.cat((mean, maxm), dim=1)
         out = self.linear(self.dropout(x))
-        return out
+        hidden = torch.stack(hidden)
+        return out, hidden
+
+        

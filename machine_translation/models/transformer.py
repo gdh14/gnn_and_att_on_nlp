@@ -194,3 +194,74 @@ class Seq2Seq(nn.Module):
         # out: (b, tgt len, nout)
         # attn: (b, nheads, tgt len, src len)
         return out, attn
+    
+    
+# analysis and metrics
+
+def translate_sentence(sentence, src_field, tgt_field, model, device, max_len=100, src_language='de'):
+    model.eval()
+    if isinstance(sentence, str):
+        import spacy
+        nlp = spacy.load(src_language)
+        tokens = [token.text.lower() for token in nlp(sentence)]
+    else:
+        tokens = [token.lower() for token in sentence]
+    tokens = [src_field.init_token] + tokens + [src_field.eos_token]
+    src_idxs = [src_field.vocab.stoi[token] for token in tokens]
+    src_tensor = torch.LongTensor(src_idxs).unsqueeze(0).to(device)
+    src_mask = model.make_src_mask(src_tensor)
+    with torch.no_grad():
+        enc_src = model.encoder(src_tensor, src_mask)
+    tgt_idxs = [tgt_field.vocab.stoi[tgt_field.init_token]]
+    
+    for i in range(max_len):
+        tgt_tensor = torch.LongTensor(tgt_idxs).unsqueeze(0).to(device)
+        tgt_mask = model.make_tgt_mask(tgt_tensor)
+        with torch.no_grad():
+            out, attn = model.decoder(tgt_tensor, enc_src, tgt_mask, src_mask)
+        pred_token = out.argmax(2)[:,-1].item()
+        tgt_idxs.append(pred_token)
+        
+        if pred_token == tgt_field.vocab.stoi[tgt_field.eos_token]:
+            break
+            
+    tgt_tokens = [tgt_field.vocab.itos[i] for i in tgt_idxs]
+    return tgt_tokens[1:], attn
+    
+    
+def display_attention(sentence, translation, attention, n_head=8, n_rows=4, n_cols=2, cmap='coolwarm'):
+    assert(n_rows * n_cols == n_head)
+    import matplotlib.pyplot as plt
+    plt.style.use('ggplot')
+    fig = plt.figure(figsize=(15,25))
+    for i in range(n_heads):
+        ax = fig.add_subplot(n_rows, n_cols, i+1)
+        attn = attention.squeeze(0)[i].cpu().detach().numpy()
+        cax = ax.matshow(attn, cmap=cmap)
+        
+        ax.tick_params(labelsize=12)
+        ax.set_xticklabels(['']+['<sos>']+[t.lower() for t in sentence]+['<eos>'], 
+                           rotation=45)
+        ax.set_yticklabels(['']+translation)
+
+        ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+        ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+
+    plt.show()
+    plt.close()
+        
+
+def bleu_and_attention(data, src_field, tgt_field, model, device, max_len=100):
+    from torchtext.data.metrics import bleu_score
+    tgts = []
+    pred_tgts = []
+    attns = []
+    for d in data:
+        src = vars(d)['src']
+        tgt = vars(d)['trg']
+        pred_tgt, attn = translate_sentence(src, src_field, tgt_field, model, device, max_len)
+        pred_tgt = pred_tgt[:-1]
+        pred_tgts.append(pred_tgt)
+        attns.append(attn)
+        tgts.append([tgt])
+    return bleu_score(pred_tgts, tgts), attns

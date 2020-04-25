@@ -1,0 +1,32 @@
+Start logging - 2020-04-24-15-51-12
+Epoch: 01 | Time: 0m -38s
+	Train Loss: 5.165 | Train PPL: 175.102
+	 Val. Loss: 5.018 |  Val. PPL: 151.064
+Epoch: 02 | Time: 0m -38s
+	Train Loss: 4.805 | Train PPL: 122.147
+	 Val. Loss: 5.147 |  Val. PPL: 171.971
+Epoch: 03 | Time: 0m -38s
+	Train Loss: 4.591 | Train PPL:  98.552
+	 Val. Loss: 5.132 |  Val. PPL: 169.321
+Epoch: 04 | Time: 0m -38s
+	Train Loss: 4.470 | Train PPL:  87.367
+	 Val. Loss: 5.014 |  Val. PPL: 150.483
+Epoch: 05 | Time: 0m -38s
+	Train Loss: 4.389 | Train PPL:  80.550
+	 Val. Loss: 5.062 |  Val. PPL: 157.926
+Epoch: 06 | Time: 0m -38s
+	Train Loss: 4.330 | Train PPL:  75.953
+	 Val. Loss: 4.994 |  Val. PPL: 147.514
+Epoch: 07 | Time: 0m -38s
+	Train Loss: 4.297 | Train PPL:  73.476
+	 Val. Loss: 5.083 |  Val. PPL: 161.315
+Epoch: 08 | Time: 0m -38s
+	Train Loss: 4.234 | Train PPL:  69.015
+	 Val. Loss: 5.019 |  Val. PPL: 151.280
+Epoch: 09 | Time: 0m -38s
+	Train Loss: 4.167 | Train PPL:  64.501
+	 Val. Loss: 5.069 |  Val. PPL: 159.072
+Epoch: 10 | Time: 0m -38s
+	Train Loss: 4.162 | Train PPL:  64.210
+	 Val. Loss: 5.067 |  Val. PPL: 158.716
+| Test Loss: 5.019 | Test PPL: 151.250 |
