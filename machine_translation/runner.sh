@@ -5,18 +5,19 @@
 ###### gcn vs. gru ######
 # python main.py hyperparams/gcn_gru1.yaml
 # python main.py hyperparams/gcn_gru2.yaml
-# python main.py hyperparams/gcn_gru3.yaml
+# python main.py hyperparams/gcn_gru3.yaml    # best
 # python main.py hyperparams/gcn_gru4.yaml
 
 # python main.py hyperparams/gcngru_gru1.yaml
-python main.py hyperparams/gcngru_gru2.yaml
+# python main.py hyperparams/gcngru_gru2.yaml
 # python main.py hyperparams/gcngru_gru3.yaml
-python main.py hyperparams/gcngru_gru4.yaml
+# python main.py hyperparams/gcngru_gru4.yaml
 
 # python main.py hyperparams/gru_seq2seq1.yaml
 # python main.py hyperparams/gru_seq2seq2.yaml
 # python main.py hyperparams/gru_seq2seq3.yaml
 # python main.py hyperparams/gru_seq2seq4.yaml
+python main.py hyperparams/gru_seq2seq5.yaml
 
 
 ###### gcu vs. transformer ######
@@ -30,8 +31,20 @@ python main.py hyperparams/gcngru_gru4.yaml
 ###### gcn vs. gru attention ######
 # python main.py hyperparams/gru_attn1.yaml
 # python main.py hyperparams/gru_attn2.yaml
-# python main.py hyperparams/gru_attn3.yaml
+# python main.py hyperparams/gru_attn3.yaml    # best
 # python main.py hyperparams/gru_attn4.yaml
+
+# python main.py hyperparams/gcnattn_gru1.yaml
+# python main.py hyperparams/gcnattn_gru2.yaml
+# python main.py hyperparams/gcnattn_gru3.yaml
+# python main.py hyperparams/gcnattn_gru4.yaml
+# python main.py hyperparams/gcnattn_gru5.yaml
+
+# python main.py hyperparams/gcngruattn_gru1.yaml
+# python main.py hyperparams/gcngruattn_gru2.yaml
+# python main.py hyperparams/gcngruattn_gru3.yaml
+# python main.py hyperparams/gcngruattn_gru4.yaml
+# python main.py hyperparams/gcngruattn_gru5.yaml
 
 
 # Testing  TO DEBUG

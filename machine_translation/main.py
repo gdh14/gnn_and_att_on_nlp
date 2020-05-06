@@ -22,7 +22,7 @@ config = yaml.load(open(config_file), Loader=yaml.FullLoader)
 args = config["training"]
 SEED = args["seed"]
 DATASET = args["dataset"]  # Multi30k or ISWLT
-MODEL = args["model"]  # gru**2, gru_attn**2, transformer, gcn_gru
+MODEL = args["model"]  # gru**2, gru_attn**2, transformer, gcn_gru, gcngru_gru, gcngruattn_gru, gcnattn_gru
 REVERSE = args["reverse"]
 BATCH_SIZE = args["batch_size"]
 ENC_EMB_DIM = args["encoder_embed_dim"]
@@ -156,6 +156,28 @@ elif MODEL == "gcngru_gru":
     train_epoch = train_epoch_gcn_gru
     evaluate = evaluate_gcn_gru
     
+elif MODEL == "gcnattn_gru":
+    from models.gru_attn import GCNEncoder, GRUDecoder, GCN2Seq, Attention
+    attn = Attention(ENC_HID_DIM, DEC_HID_DIM)
+    enc = GCNEncoder(INPUT_DIM, ENC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, ENC_DROPOUT)
+    dec = GRUDecoder(OUTPUT_DIM, DEC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, DEC_DROPOUT, attn)
+    model = GCN2Seq(enc, dec, device).to(device)
+
+    from src.train import train_epoch_gcnattn_gru, evaluate_gcnattn_gru, epoch_time
+    train_epoch = train_epoch_gcnattn_gru
+    evaluate = evaluate_gcnattn_gru
+    
+elif MODEL == "gcngruattn_gru":
+    from models.gru_attn import GCNGRUEncoder, GRUDecoder, GCN2Seq, Attention
+    attn = Attention(ENC_HID_DIM, DEC_HID_DIM)
+    enc = GCNGRUEncoder(INPUT_DIM, ENC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, ENC_DROPOUT, device)
+    dec = GRUDecoder(OUTPUT_DIM, DEC_EMB_DIM, ENC_HID_DIM, DEC_HID_DIM, NLAYERS, DEC_DROPOUT, attn)
+    model = GCN2Seq(enc, dec, device).to(device)
+
+    from src.train import train_epoch_gcnattn_gru, evaluate_gcnattn_gru, epoch_time
+    train_epoch = train_epoch_gcnattn_gru
+    evaluate = evaluate_gcnattn_gru
+    
 else:
     raise ValueError("Wrong model choice")
 
@@ -179,11 +201,8 @@ logger.write(f'The model has {n_params:,} trainable parameters')
 for epoch in range(N_EPOCHS):
     start_time = time.time()
     train_loss = train_epoch(model, train_iterator, optimizer, criterion, CLIP)
-    if MODEL in ["gru_attn**2", "transformer"]:
-        valid_loss, attns = evaluate(model, valid_iterator, criterion)
-    else:
-        valid_loss = evaluate(model, valid_iterator, criterion)
-        
+    # payload contains all info needed for interpretation and viz
+    valid_loss, payload = evaluate(model, valid_iterator, criterion)
     end_time = time.time()
     epoch_mins, epoch_secs = epoch_time(start_time, end_time)
     
@@ -198,11 +217,8 @@ for epoch in range(N_EPOCHS):
 state_dict = torch.load(os.path.join(MODEL_PATH, "checkpoint.pt"))['model_state_dict']
 model.load_state_dict(state_dict)
 
-if MODEL in ["gru_attn**2", "transformer"]:
-    test_loss, attns = evaluate(model, test_iterator, criterion)
-else:
-    test_loss = evaluate(model, test_iterator, criterion)
-    
+test_loss, attns = evaluate(model, test_iterator, criterion)
+
 print(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
 logger.write(f'| Test Loss: {test_loss:.3f} | Test PPL: {math.exp(test_loss):7.3f} |')
 

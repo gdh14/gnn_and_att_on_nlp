@@ -25,7 +25,11 @@ class GCNLayer(nn.Module):
         W: (ninp, nout)
         """
         x = self.dropout(x)
-        x = torch.bmm(A, x)  # x: (b, seq len, ninp)
+        try:
+            x = torch.bmm(A, x)  # x: (b, seq len, ninp)
+        except:
+            import pdb; pdb.set_trace()
+
         x = x.matmul(self.W) + self.b
         x = self.relu(x)
         return x

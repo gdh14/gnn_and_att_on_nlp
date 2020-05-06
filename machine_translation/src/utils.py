@@ -104,3 +104,6 @@ def print_status(logger, epoch, epoch_mins, epoch_secs, train_loss, valid_loss):
     logger.write(f'\tTrain Loss: {train_loss:.3f} | Train PPL: {math.exp(train_loss):7.3f}')
     logger.write(f'\t Val. Loss: {valid_loss:.3f} |  Val. PPL: {math.exp(valid_loss):7.3f}')
     
+
+    
+    

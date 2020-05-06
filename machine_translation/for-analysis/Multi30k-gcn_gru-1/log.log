@@ -1,0 +1,30 @@
+Start logging - 2020-04-25-10-53-37
+The model has 17,692,681 trainable parameters
+Epoch: 01 | Time: 0m -45s
+	Train Loss: 4.628 | Train PPL: 102.313
+	 Val. Loss: 4.665 |  Val. PPL: 106.116
+Epoch: 02 | Time: 0m -46s
+	Train Loss: 4.068 | Train PPL:  58.449
+	 Val. Loss: 4.541 |  Val. PPL:  93.745
+Epoch: 03 | Time: 0m -46s
+	Train Loss: 3.881 | Train PPL:  48.455
+	 Val. Loss: 4.443 |  Val. PPL:  85.072
+Epoch: 04 | Time: 0m -46s
+	Train Loss: 3.744 | Train PPL:  42.270
+	 Val. Loss: 4.450 |  Val. PPL:  85.601
+Epoch: 05 | Time: 0m -46s
+	Train Loss: 3.616 | Train PPL:  37.172
+	 Val. Loss: 4.388 |  Val. PPL:  80.460
+Epoch: 06 | Time: 0m -46s
+	Train Loss: 3.533 | Train PPL:  34.232
+	 Val. Loss: 4.474 |  Val. PPL:  87.711
+Epoch: 07 | Time: 0m -46s
+	Train Loss: 3.460 | Train PPL:  31.805
+	 Val. Loss: 4.454 |  Val. PPL:  85.929
+Epoch: 08 | Time: 0m -46s
+	Train Loss: 3.389 | Train PPL:  29.639
+	 Val. Loss: 4.494 |  Val. PPL:  89.471
+Epoch: 09 | Time: 0m -46s
+	Train Loss: 3.324 | Train PPL:  27.780
+	 Val. Loss: 4.552 |  Val. PPL:  94.803
+| Test Loss: 4.429 | Test PPL:  83.869 |

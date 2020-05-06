@@ -8,7 +8,7 @@ training:
   encoder_embed_dim: 300
   encoder_hidden_dim: 600
   grad_clip: 1
-  id: 3
+  id: 5
   lr: 0.001
   lr_decay_ratio: 0.9
   model: gru**2

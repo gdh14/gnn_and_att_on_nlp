@@ -1,0 +1,24 @@
+training:
+  batch_size: 64
+  dataset: Multi30k
+  decoder_dropout: 0.2
+  decoder_embed_dim: 300
+  decoder_heads: 8
+  decoder_hidden_dim: 256
+  decoder_pf_dim: 512
+  encoder_dropout: 0.2
+  encoder_embed_dim: 300
+  encoder_heads: 8
+  encoder_hidden_dim: 256
+  encoder_pf_dim: 512
+  grad_clip: 1
+  id: 100
+  lr: 0.0005
+  lr_decay_ratio: 0.9
+  max_len: 100
+  model: transformer
+  num_epochs: 20
+  num_layers: 4
+  patience: 5
+  reverse: false
+  seed: 11747
