@@ -1,9 +1,13 @@
 # ignore data file
-data/*
+relation_extraction/dataset/semeval
+relation_extraction/dataset/vocab
+relation_extraction/dataset/glove
+relation_extraction/saved_models/
 
 # cache file
 *.pyc
+*__pycache__*
+*.ipynb*
 
 # test file
 *test.py
-git 
