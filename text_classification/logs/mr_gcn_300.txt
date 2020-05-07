@@ -1,0 +1,70 @@
+(pytorch_p36) sh-4.2$ python3 train.py mr
+Using onehot features?  False
+[2020/4/17 14:04:18] Epoch: 1, train_loss= 0.69338, train_acc= 0.50117, val_loss= 0.69329, val_acc= 0.49789, time= 2.70617
+[2020/4/17 14:04:20] Epoch: 2, train_loss= 0.69307, train_acc= 0.50555, val_loss= 0.69328, val_acc= 0.50211, time= 2.44527
+[2020/4/17 14:04:23] Epoch: 3, train_loss= 0.69278, train_acc= 0.52056, val_loss= 0.69326, val_acc= 0.50070, time= 2.44663
+[2020/4/17 14:04:25] Epoch: 4, train_loss= 0.69249, train_acc= 0.54354, val_loss= 0.69325, val_acc= 0.51758, time= 2.56905
+[2020/4/17 14:04:28] Epoch: 5, train_loss= 0.69220, train_acc= 0.56902, val_loss= 0.69323, val_acc= 0.53868, time= 2.43673
+[2020/4/17 14:04:30] Epoch: 6, train_loss= 0.69191, train_acc= 0.58684, val_loss= 0.69322, val_acc= 0.54712, time= 2.44042
+[2020/4/17 14:04:33] Epoch: 7, train_loss= 0.69161, train_acc= 0.60122, val_loss= 0.69320, val_acc= 0.54571, time= 2.44006
+[2020/4/17 14:04:35] Epoch: 8, train_loss= 0.69130, train_acc= 0.61154, val_loss= 0.69318, val_acc= 0.54430, time= 2.43750
+[2020/4/17 14:04:38] Epoch: 9, train_loss= 0.69099, train_acc= 0.62264, val_loss= 0.69316, val_acc= 0.55274, time= 2.43903
+[2020/4/17 14:04:40] Epoch: 10, train_loss= 0.69066, train_acc= 0.62920, val_loss= 0.69315, val_acc= 0.55274, time= 2.62347
+[2020/4/17 14:04:43] Epoch: 11, train_loss= 0.69033, train_acc= 0.63467, val_loss= 0.69313, val_acc= 0.54430, time= 2.44386
+[2020/4/17 14:04:45] Epoch: 12, train_loss= 0.68998, train_acc= 0.63780, val_loss= 0.69311, val_acc= 0.55274, time= 2.44299
+[2020/4/17 14:04:48] Epoch: 13, train_loss= 0.68963, train_acc= 0.64139, val_loss= 0.69309, val_acc= 0.55696, time= 2.44167
+[2020/4/17 14:04:50] Epoch: 14, train_loss= 0.68926, train_acc= 0.64405, val_loss= 0.69307, val_acc= 0.55696, time= 2.44615
+[2020/4/17 14:04:52] Epoch: 15, train_loss= 0.68888, train_acc= 0.64624, val_loss= 0.69306, val_acc= 0.55837, time= 2.44577
+[2020/4/17 14:04:55] Epoch: 16, train_loss= 0.68850, train_acc= 0.65030, val_loss= 0.69304, val_acc= 0.56681, time= 2.44571
+[2020/4/17 14:04:57] Epoch: 17, train_loss= 0.68810, train_acc= 0.65124, val_loss= 0.69302, val_acc= 0.56821, time= 2.44244
+[2020/4/17 14:05:00] Epoch: 18, train_loss= 0.68770, train_acc= 0.65374, val_loss= 0.69300, val_acc= 0.57243, time= 2.43494
+[2020/4/17 14:05:03] Epoch: 19, train_loss= 0.68728, train_acc= 0.65437, val_loss= 0.69299, val_acc= 0.57384, time= 3.20400
+[2020/4/17 14:05:06] Epoch: 20, train_loss= 0.68686, train_acc= 0.65609, val_loss= 0.69297, val_acc= 0.57384, time= 2.79989
+[2020/4/17 14:05:08] Epoch: 21, train_loss= 0.68643, train_acc= 0.65593, val_loss= 0.69295, val_acc= 0.57525, time= 2.42897
+[2020/4/17 14:05:11] Epoch: 22, train_loss= 0.68599, train_acc= 0.65765, val_loss= 0.69294, val_acc= 0.57384, time= 2.43229
+[2020/4/17 14:05:13] Epoch: 23, train_loss= 0.68555, train_acc= 0.65875, val_loss= 0.69292, val_acc= 0.57806, time= 2.42555
+[2020/4/17 14:05:15] Epoch: 24, train_loss= 0.68510, train_acc= 0.66093, val_loss= 0.69291, val_acc= 0.58228, time= 2.42307
+[2020/4/17 14:05:18] Epoch: 25, train_loss= 0.68464, train_acc= 0.66078, val_loss= 0.69290, val_acc= 0.58790, time= 2.42951
+[2020/4/17 14:05:20] Epoch: 26, train_loss= 0.68418, train_acc= 0.66203, val_loss= 0.69289, val_acc= 0.58931, time= 2.43812
+[2020/4/17 14:05:23] Epoch: 27, train_loss= 0.68372, train_acc= 0.66422, val_loss= 0.69288, val_acc= 0.58931, time= 2.43405
+[2020/4/17 14:05:25] Epoch: 28, train_loss= 0.68325, train_acc= 0.66453, val_loss= 0.69287, val_acc= 0.58650, time= 2.43644
+[2020/4/17 14:05:28] Epoch: 29, train_loss= 0.68278, train_acc= 0.66703, val_loss= 0.69286, val_acc= 0.58931, time= 2.43721
+[2020/4/17 14:05:30] Epoch: 30, train_loss= 0.68231, train_acc= 0.66719, val_loss= 0.69286, val_acc= 0.59072, time= 2.42884
+[2020/4/17 14:05:32] Epoch: 31, train_loss= 0.68184, train_acc= 0.66891, val_loss= 0.69285, val_acc= 0.59212, time= 2.43103
+[2020/4/17 14:05:35] Epoch: 32, train_loss= 0.68136, train_acc= 0.67000, val_loss= 0.69285, val_acc= 0.59634, time= 2.42832
+[2020/4/17 14:05:37] Epoch: 33, train_loss= 0.68088, train_acc= 0.67141, val_loss= 0.69285, val_acc= 0.59634, time= 2.43822
+[2020/4/17 14:05:40] Epoch: 34, train_loss= 0.68041, train_acc= 0.67375, val_loss= 0.69284, val_acc= 0.60056, time= 2.42784
+[2020/4/17 14:05:42] Epoch: 35, train_loss= 0.67993, train_acc= 0.67516, val_loss= 0.69285, val_acc= 0.60338, time= 2.42598
+[2020/4/17 14:05:45] Epoch: 36, train_loss= 0.67945, train_acc= 0.67500, val_loss= 0.69285, val_acc= 0.60197, time= 2.42523
+[2020/4/17 14:05:47] Epoch: 37, train_loss= 0.67898, train_acc= 0.67610, val_loss= 0.69285, val_acc= 0.60338, time= 2.42975
+[2020/4/17 14:05:49] Epoch: 38, train_loss= 0.67850, train_acc= 0.67751, val_loss= 0.69286, val_acc= 0.60478, time= 2.42747
+[2020/4/17 14:05:49] Early stopping...
+[2020/4/17 14:05:49] Optimization Finished!
+[2020/4/17 14:05:50] Test set results: 
+[2020/4/17 14:05:50]     loss= 0.69153, accuracy= 0.58948, time= 0.74542
+[2020/4/17 14:05:50] Test Precision, Recall and F1-Score...
+[2020/4/17 14:05:50]               precision    recall  f1-score   support
+[2020/4/17 14:05:50] 
+[2020/4/17 14:05:50]            0     0.5881    0.5971    0.5926      1777
+[2020/4/17 14:05:50]            1     0.5909    0.5819    0.5863      1777
+[2020/4/17 14:05:50] 
+[2020/4/17 14:05:50]    micro avg     0.5895    0.5895    0.5895      3554
+[2020/4/17 14:05:50]    macro avg     0.5895    0.5895    0.5895      3554
+[2020/4/17 14:05:50] weighted avg     0.5895    0.5895    0.5895      3554
+[2020/4/17 14:05:50] 
+[2020/4/17 14:05:50] Macro average Test Precision, Recall and F1-Score...
+[2020/4/17 14:05:50] (0.5894973075704784, 0.5894766460326393, 0.5894529510924897, None)
+[2020/4/17 14:05:50] Micro average Test Precision, Recall and F1-Score...
+[2020/4/17 14:05:50] (0.5894766460326393, 0.5894766460326393, 0.5894766460326393, None)
+[2020/4/17 14:05:50] Embeddings:
+Word_embeddings:19475
+Train_doc_embeddings:6397
+Test_doc_embeddings:3554
+Word_embeddings::50] 
+[[0.01679419 0.00449694 0.         ... 0.02520267 0.04491343 0.00242692]
+ [0.03110417 0.03225109 0.         ... 0.01061337 0.         0.00916518]
+ [0.022244   0.         0.         ... 0.00101648 0.01448055 0.00818235]
+ ...
+ [0.         0.         0.00283109 ... 0.02218797 0.         0.        ]
+ [0.         0.         0.0108313  ... 0.01654033 0.         0.00649227]
+ [0.01203171 0.0028566  0.01350867 ... 0.         0.01679073 0.00268332]]

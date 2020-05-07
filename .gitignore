@@ -1,5 +1,14 @@
 # ignore data file
 data/*
+text_classification/data/*
+
+# models
+*/best_models/*
+*/saved_models_mr/*
+*/saved_models_20ng/*
+
+# word embedding
+*/word_embeddings
 
 # cache file
 *.pyc
@@ -7,3 +16,7 @@ data/*
 # test file
 *test.py
 git 
+
+.ipynb_checkpoints
+*.ipynb_checkpoints
+*/.DS_Store

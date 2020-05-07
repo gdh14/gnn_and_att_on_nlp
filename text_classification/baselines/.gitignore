@@ -1,0 +1,5 @@
+saved_models_mr/*
+saved_models_20ng/*
+best_models/*
+doc_embeddings/*
+.DS_Store
