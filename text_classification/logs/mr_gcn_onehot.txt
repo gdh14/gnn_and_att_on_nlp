@@ -1,0 +1,35 @@
+(pytorch_p36) sh-4.2$ python3 train.py mr
+Using onehot features?  True
+[2020/4/17 02:09:51] Epoch: 1, train_loss= 0.73684, train_acc= 0.49742, val_loss= 0.69461, val_acc= 0.49930, time= 6.05010
+[2020/4/17 02:09:55] Epoch: 2, train_loss= 0.69496, train_acc= 0.56526, val_loss= 0.69468, val_acc= 0.55696, time= 4.24867
+[2020/4/17 02:09:59] Epoch: 3, train_loss= 0.68641, train_acc= 0.59184, val_loss= 0.69374, val_acc= 0.56681, time= 4.24795
+[2020/4/17 02:10:03] Epoch: 4, train_loss= 0.67034, train_acc= 0.64921, val_loss= 0.69224, val_acc= 0.61181, time= 4.27582
+[2020/4/17 02:10:08] Epoch: 5, train_loss= 0.65108, train_acc= 0.75395, val_loss= 0.69122, val_acc= 0.69058, time= 4.26625
+[2020/4/17 02:10:12] Epoch: 6, train_loss= 0.63672, train_acc= 0.86056, val_loss= 0.69090, val_acc= 0.73136, time= 4.27912
+[2020/4/17 02:10:16] Epoch: 7, train_loss= 0.62848, train_acc= 0.88479, val_loss= 0.69092, val_acc= 0.72152, time= 4.27409
+[2020/4/17 02:10:20] Epoch: 8, train_loss= 0.62328, train_acc= 0.88370, val_loss= 0.69091, val_acc= 0.73136, time= 4.23483
+[2020/4/17 02:10:25] Epoch: 9, train_loss= 0.61822, train_acc= 0.88792, val_loss= 0.69074, val_acc= 0.74402, time= 4.24659
+[2020/4/17 02:10:29] Epoch: 10, train_loss= 0.61244, train_acc= 0.89761, val_loss= 0.69048, val_acc= 0.76653, time= 4.24423
+[2020/4/17 02:10:33] Epoch: 11, train_loss= 0.60649, train_acc= 0.91246, val_loss= 0.69027, val_acc= 0.76793, time= 4.24298
+[2020/4/17 02:10:37] Epoch: 12, train_loss= 0.60126, train_acc= 0.92074, val_loss= 0.69021, val_acc= 0.76371, time= 4.27014
+[2020/4/17 02:10:42] Epoch: 13, train_loss= 0.59719, train_acc= 0.92731, val_loss= 0.69029, val_acc= 0.75809, time= 4.25011
+[2020/4/17 02:10:46] Epoch: 14, train_loss= 0.59419, train_acc= 0.93200, val_loss= 0.69048, val_acc= 0.75668, time= 4.23927
+[2020/4/17 02:10:50] Epoch: 15, train_loss= 0.59181, train_acc= 0.93309, val_loss= 0.69068, val_acc= 0.75668, time= 4.22622
+[2020/4/17 02:10:50] Early stopping...
+[2020/4/17 02:10:50] Optimization Finished!
+[2020/4/17 02:10:51] Test set results: 
+[2020/4/17 02:10:51]     loss= 0.67771, accuracy= 0.74620, time= 1.31692
+[2020/4/17 02:10:51] Test Precision, Recall and F1-Score...
+[2020/4/17 02:10:51]               precision    recall  f1-score   support
+[2020/4/17 02:10:51] 
+[2020/4/17 02:10:51]            0     0.7810    0.6843    0.7295      1777
+[2020/4/17 02:10:51]            1     0.7191    0.8081    0.7610      1777
+[2020/4/17 02:10:51] 
+[2020/4/17 02:10:51]    micro avg     0.7462    0.7462    0.7462      3554
+[2020/4/17 02:10:51]    macro avg     0.7500    0.7462    0.7452      3554
+[2020/4/17 02:10:51] weighted avg     0.7500    0.7462    0.7452      3554
+[2020/4/17 02:10:51] 
+[2020/4/17 02:10:51] Macro average Test Precision, Recall and F1-Score...
+[2020/4/17 02:10:51] (0.7500338497470033, 0.7462014631401238, 0.7452251997931096, None)
+[2020/4/17 02:10:51] Micro average Test Precision, Recall and F1-Score...
+[2020/4/17 02:10:51] (0.7462014631401238, 0.7462014631401238, 0.7462014631401238, None)

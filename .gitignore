@@ -1,13 +1,24 @@
-# ignore data file
+# data
 relation_extraction/dataset/semeval
 relation_extraction/dataset/vocab
 relation_extraction/dataset/glove
-relation_extraction/saved_models/
+text_classification/data/*
+
+# models
+*saved_models/*
+*best_models/*
+*saved_models_mr/*
+*saved_models_20ng/*
+
+# word embedding
+*/word_embeddings
 
 # cache file
 *.pyc
 *__pycache__*
-*.ipynb*
+.ipynb_checkpoints
+*.ipynb_checkpoints
+*/.DS_Store
 
 # test file
 *test.py
