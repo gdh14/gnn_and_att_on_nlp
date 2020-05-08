@@ -1,9 +1,6 @@
-A Comparison between Graph and Attention Neural Models on Essential NLP Tasks
-============
+Text Classification
+===========
 
-<<<<<<< HEAD:README.md
-The repository contains a comparison study on several essential NLP tasks. See README in each folder for details.
-=======
 ## Prepare Your data
 1. Download [20 NG Dataset](http://qwone.com/~jason/20Newsgroups/20news-bydate.tar.gz)
 2. Rename the folder as `20ng`
