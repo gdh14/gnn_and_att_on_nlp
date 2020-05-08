@@ -10,4 +10,3 @@ Text Classification
 
 1. Run `python preprocess.py config_20ng.yaml`
 2. Run `python train.py 20ng`
->>>>>>> 9289fa69ba0a39f7e179202255db174ce05764b8:text_classification/README.md
