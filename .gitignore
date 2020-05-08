@@ -1,17 +1,15 @@
 # data
-relation_extraction/dataset/semeval
-relation_extraction/dataset/vocab
-relation_extraction/dataset/glove
+*/dataset/semeval
+*/dataset/vocab
+*/dataset/glove
+*/word_embeddings
 text_classification/data/*
 
 # models
-*saved_models/*
-*best_models/*
-*saved_models_mr/*
-*saved_models_20ng/*
-
-# word embedding
-*/word_embeddings
+*saved_models
+*best_models
+*saved_models_mr
+*saved_models_20ng
 
 # cache file
 *.pyc
